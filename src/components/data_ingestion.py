@@ -1,11 +1,15 @@
 import sqlite3
 import pandas as pd
 import os
+from dotenv import load_dotenv
+load_dotenv()
+
 DB_PATH = os.getenv("DB_PATH")
+print(DB_PATH)
 class DataIngestion:
-    def __init__(self, db_path:str, table_name: str):
-        self.db_path = db_path
-        self.table_name = table_name
+    def __init__(self):
+        self.db_path = DB_PATH
+        self.table_name = "metric_data"
 
     def data_ingest(self) -> pd.DataFrame:
         if not os.path.exists(self.db_path):

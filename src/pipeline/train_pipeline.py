@@ -1,29 +1,44 @@
 from components.data_ingestion import DataIngestion
 from components.data_cleaning import DataCleaning
-import os
-from dotenv import load_dotenv
-load_dotenv()
+from components.model_training import ModelTrainer
+from components.model_evaluation import ModelEvaluator
 
-DB_PATH = os.getenv("DB_PATH")
-print(DB_PATH)
 class TrainPipeline:
-    def __init__(self, db_path, table_name):
-        self.db_path = db_path
-        self.table_name = table_name
+    def __init__(self):
+        pass
     
-    def run(self):
+    def run_pipeline(self):
         # Ingest
-        ingestion = DataIngestion(self.db_path, self.table_name)
+        ingestion = DataIngestion()
         raw_data = ingestion.data_ingest()
         print(raw_data.dtypes)
 
         # cleaning
         cleaner = DataCleaning()
-        df_cleaned = cleaner.clean(raw_data)
+        input_data = cleaner.clean(raw_data)
 
-        return df_cleaned
+        #splitting the data to train and val set
+        X = input_data.drop('label',axis =1)
+        y = input_data['label']
+        split_idx =int(0.8 * len(input_data))
+        X_train, X_val = X[:split_idx], X[split_idx:]
+        y_train, y_val = y[:split_idx], y[split_idx:]
+
+
+        trainer = ModelTrainer()
+        model = trainer.train(X_train)
+
+        evaluation = ModelEvaluator()
+        results = evaluation.evalute(model,X_val,y_val)
+
+        print(results)
+
+        final_model = trainer.train(X)
+        trainer.save_model(final_model)
+
+        return final_model
     
-if  __name__ == "__main__":
-    pipeline = TrainPipeline(db_path=DB_PATH, table_name="metric_data")
-    clean_df = pipeline.run()
-    print(clean_df.head())
+
+
+    
+
