@@ -12,6 +12,6 @@ class ModelTrainer:
         self.model.fit(X_train)
         return self.model
 
-    def save_model(self, model, path = "model/isolation_forest.pkl"):
+    def save_model(self, model, path = "src/model/isolation_forest.pkl"):
         joblib.dump(model, path)
 

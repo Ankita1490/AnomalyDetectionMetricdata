@@ -13,7 +13,7 @@ DB_PATH = os.getenv("DB_PATH")
 def create_synthetic_metric_data():
     np.random.seed(42)
     #number of samples
-    n_samples =10000
+    n_samples = 10000
     anomaly_fraction = 0.15
     n_anomalies = int(n_samples * anomaly_fraction)
     n_normal = n_samples-n_anomalies
