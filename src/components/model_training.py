@@ -15,3 +15,6 @@ class ModelTrainer:
     def save_model(self, model, path = "src/model/isolation_forest.pkl"):
         joblib.dump(model, path)
 
+    def save_train_set(self, train_df: pd.DataFrame, path = "src/data/train_cleaned.csv"):
+        train_df.to_csv(path)
+

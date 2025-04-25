@@ -35,6 +35,7 @@ class TrainPipeline:
 
         final_model = trainer.train(X)
         trainer.save_model(final_model)
+        trainer.save_train_set(X)
 
         return final_model
     
